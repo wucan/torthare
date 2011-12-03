@@ -23,6 +23,7 @@
   <script>
     function PlayState() {
       var player
+      var hare
       var blocks
       var bullets
       var fps
@@ -82,6 +83,16 @@
           if (collide)
             this.move(-x, -y)
         }
+
+        /* place a hare */
+        hare = new jaws.Sprite({x:viewport.max_x/2, y:viewport.max_y - jaws.height, scale: 0.5, anchor: "center"})
+        var anim = new jaws.Animation({sprite_sheet: "images/hare.png", frame_size: [440/4,660/4], frame_duration: 100})
+        hare.anim_default = anim.slice(0,4)
+        hare.anim_up = anim.slice(0,1)
+        hare.anim_down = anim.slice(0,1)
+        hare.anim_left = anim.slice(0,1)
+        hare.anim_right = anim.slice(0,1)
+        hare.setImage( hare.anim_default.next() )
       }
 
       /* update() will get called each game tick with your specified FPS. Put game logic here. */
@@ -123,6 +134,9 @@
         bullets.deleteIf(isOutsideCanvas)
         bullets.update()
 
+        /* update hare */
+        hare.setImage( hare.anim_default.next() )
+
         viewport.centerAround(player)
         viewport.move(0, -(jaws.height / 2) + player.height)
         fps.innerHTML = jaws.game_loop.fps + ". player: " + player.x + "/" + player.y
@@ -145,6 +159,7 @@
         // Fastest: Use optimized viewport.drawTileMap() */
         viewport.drawTileMap( tile_map )
         viewport.draw( player )
+        viewport.draw( hare )
         viewport.draw( bullets )
       }
     }
@@ -191,7 +206,8 @@
     jaws.onload = function() {
       jaws.unpack()
       jaws.assets.add(["images/tortoise_32x32.png","images/grass.png",
-                       "images/road.png", "images/bullet.png"])
+                       "images/road.png", "images/bullet.png",
+                       "images/hare.png"])
       jaws.start(MenuState)  // Our convenience function jaws.start() will load assets, call setup and loop update/draw in 60 FPS
     }
   </script>
