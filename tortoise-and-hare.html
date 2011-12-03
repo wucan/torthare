@@ -101,7 +101,7 @@
                                       viewport: viewport})
             bullets.push(bullet)
             bullet.update = function() {
-              this.y -= 10
+              this.y -= Math.random() * 10
             }
 
             // left side gun
@@ -112,7 +112,7 @@
                                       viewport: viewport})
             bullets.push(bullet)
             bullet.update = function() {
-              this.y -= 10
+              this.y -= Math.random() * 10
             }
 
             player.can_fire = false
