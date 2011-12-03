@@ -10,6 +10,7 @@
   <canvas width=200 height=320></canvas>
 
   FPS: <span id="fps"></span>. Move with arrow keys.
+  <div>objects: <span id="objects"></span></div>
   
   <div id="info">
     <h1>The Tortoise and Hare</h1>
@@ -24,6 +25,7 @@
       var player
       var blocks
       var fps
+      var objects
       var width = 50
       var height = 50
       var tile_map
@@ -32,18 +34,19 @@
       /* Called once when a game state is activated. Use it for one-time setup code. */
       this.setup = function() {
         fps = document.getElementById("fps")
+        objects = document.getElementById("objects")
         blocks = new jaws.SpriteList()
 
         for(var i = 0; i < width; i++) {
           for(var i2 = 0; i2 < height; i2++) {
-            blocks.push( new jaws.Sprite({image: "images/grass.png", x: i*32, y: i2*32}) )
+            blocks.push( new jaws.Sprite({image: "images/grass.png", x: i*32, y: i2*32, kind: "grass"}) )
           }
         }
 
         // road
         for(var i = width / 2 - 2; i < width / 2 + 2; i++) {
           for(var i2 = 0; i2 < height; i2++) {
-            blocks.push( new jaws.Sprite({image: "images/road.png", x: i*32, y: i2*32}) )
+            blocks.push( new jaws.Sprite({image: "images/road.png", x: i*32, y: i2*32, kind: "road"}) )
           }
         }
 
@@ -69,15 +72,22 @@
 
         player.setImage( player.anim_default.next() )
         jaws.preventDefaultKeys(["up", "down", "left", "right", "space"])
+        player._move = function(x, y) {
+          this.move(x, y)
+          objects.innerHTML = tile_map.atRect(player.rect()).length
+          if (tile_map.atRect(player.rect()).length < 4) {
+            this.move(-x, -y)
+          }
+        }
       }
 
       /* update() will get called each game tick with your specified FPS. Put game logic here. */
       this.update = function() {
         player.setImage( player.anim_default.next() )
-        if(jaws.pressed("left"))  { player.move(-2,0);  player.setImage(player.anim_left.next()) }
-        if(jaws.pressed("right")) { player.move(2,0);   player.setImage(player.anim_right.next()) }
-        if(jaws.pressed("up"))    { player.move(0, -2); player.setImage(player.anim_up.next()) }
-        if(jaws.pressed("down"))  { player.move(0, 2);  player.setImage(player.anim_down.next()) }
+        if(jaws.pressed("left"))  { player._move(-2,0);  player.setImage(player.anim_left.next()) }
+        if(jaws.pressed("right")) { player._move(2,0);   player.setImage(player.anim_right.next()) }
+        if(jaws.pressed("up"))    { player._move(0, -2); player.setImage(player.anim_up.next()) }
+        if(jaws.pressed("down"))  { player._move(0, 2);  player.setImage(player.anim_down.next()) }
 
         viewport.centerAround(player)
         fps.innerHTML = jaws.game_loop.fps + ". player: " + player.x + "/" + player.y
