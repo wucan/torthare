@@ -93,8 +93,20 @@
         if(jaws.pressed("down"))  { player._move(0, 2);  player.setImage(player.anim_down.next()) }
         if(jaws.pressed("space")) {
           if (player.can_fire) {
+            // right side gun
             bullet = new jaws.Sprite({image: "images/bullet.png",
                                       x: player.rect().right,
+                                      y: player.y,
+                                      kind: "bullet",
+                                      viewport: viewport})
+            bullets.push(bullet)
+            bullet.update = function() {
+              this.y -= 10
+            }
+
+            // left side gun
+            bullet = new jaws.Sprite({image: "images/bullet.png",
+                                      x: player.rect().x - bullet.width,
                                       y: player.y,
                                       kind: "bullet",
                                       viewport: viewport})
