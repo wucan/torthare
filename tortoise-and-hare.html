@@ -24,6 +24,7 @@
     function Example() {
       var player
       var blocks
+      var bullets
       var fps
       var objects
       var width = 50
@@ -36,6 +37,7 @@
         fps = document.getElementById("fps")
         objects = document.getElementById("objects")
         blocks = new jaws.SpriteList()
+        bullets = new jaws.SpriteList()
 
         for(var i = 0; i < width; i++) {
           for(var i2 = 0; i2 < height; i2++) {
@@ -71,6 +73,7 @@
         player.anim_right = anim.slice(0,1)
 
         player.setImage( player.anim_default.next() )
+        player.can_fire = true
         jaws.preventDefaultKeys(["up", "down", "left", "right", "space"])
         player._move = function(x, y) {
           this.move(x, y)
@@ -88,6 +91,25 @@
         if(jaws.pressed("right")) { player._move(2,0);   player.setImage(player.anim_right.next()) }
         if(jaws.pressed("up"))    { player._move(0, -2); player.setImage(player.anim_up.next()) }
         if(jaws.pressed("down"))  { player._move(0, 2);  player.setImage(player.anim_down.next()) }
+        if(jaws.pressed("space")) {
+          if (player.can_fire) {
+            bullet = new jaws.Sprite({image: "images/bullet.png",
+                                      x: player.rect().right,
+                                      y: player.y,
+                                      kind: "bullet",
+                                      viewport: viewport})
+            bullets.push(bullet)
+            bullet.update = function() {
+              this.y -= 10
+            }
+
+            player.can_fire = false
+            setTimeout(function() { player.can_fire = true }, 100)
+          }
+        }
+
+        bullets.deleteIf(isOutsideCanvas)
+        bullets.update()
 
         viewport.centerAround(player)
         fps.innerHTML = jaws.game_loop.fps + ". player: " + player.x + "/" + player.y
@@ -110,13 +132,19 @@
         // Fastest: Use optimized viewport.drawTileMap() */
         viewport.drawTileMap( tile_map )
         viewport.draw( player )
+        viewport.draw( bullets )
       }
     }
     
+    function isOutsideCanvas(item) {
+      viewport = item.options.viewport
+      return (item.x < 0 || item.y < 0 || item.x > viewport.max_x || item.y > viewport.max_y)
+    }
+
     jaws.onload = function() {
       jaws.unpack()
       jaws.assets.add(["images/tortoise_32x32.png","images/grass.png",
-                       "images/road.png"])
+                       "images/road.png", "images/bullet.png"])
       jaws.start(Example)  // Our convenience function jaws.start() will load assets, call setup and loop update/draw in 60 FPS
     }
   </script>
