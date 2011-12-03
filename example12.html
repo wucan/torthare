@@ -1,8 +1,8 @@
 <!DOCTYPE html> 
 <html>
   <head>
-    <script src="../jaws-dynamic.js"></script>
-    <link type="text/css" rel="stylesheet" href="style.css" />
+    <script src="lib/jaws/jaws-dynamic.js"></script>
+    <link type="text/css" rel="stylesheet" href="css/style.css" />
     <title>Jaws Example #8 - TileMap()</title>
   </head>
 <body>
@@ -37,7 +37,7 @@
 
         for(var i = 0; i < width; i++) {
           for(var i2 = 0; i2 < height; i2++) {
-            blocks.push( new Sprite({image: "grass.png", x: i*32, y: i2*32}) )
+            blocks.push( new jaws.Sprite({image: "images/grass.png", x: i*32, y: i2*32}) )
           }
         }
         
@@ -53,7 +53,7 @@
 
         player = new jaws.Sprite({x:10, y:10, scale: 2, anchor: "center"})
         
-        var anim = new jaws.Animation({sprite_sheet: "droid_11x15.png", frame_size: [11,15], frame_duration: 100})
+        var anim = new jaws.Animation({sprite_sheet: "images/droid_11x15.png", frame_size: [11,15], frame_duration: 100})
         player.anim_default = anim.slice(0,5)
         player.anim_up = anim.slice(6,8)
         player.anim_down = anim.slice(8,10)
@@ -98,7 +98,7 @@
     
     jaws.onload = function() {
       jaws.unpack()
-      jaws.assets.add(["droid_11x15.png","block.bmp","grass.png"])
+      jaws.assets.add(["images/droid_11x15.png","images/grass.png"])
       jaws.start(Example)  // Our convenience function jaws.start() will load assets, call setup and loop update/draw in 60 FPS
     }
   </script>
