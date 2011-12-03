@@ -125,6 +125,7 @@
         bullets.update()
 
         viewport.centerAround(player)
+        viewport.move(0, -(jaws.height / 2) + player.height)
         fps.innerHTML = jaws.game_loop.fps + ". player: " + player.x + "/" + player.y
       }
 
