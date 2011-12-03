@@ -135,6 +135,7 @@
         }
 
         bullets.deleteIf(isOutsideCanvas)
+        bullets.deleteIf(function(b) {return b.rect().collideRect(hare.rect())})
         bullets.update()
 
         /* update hare */
