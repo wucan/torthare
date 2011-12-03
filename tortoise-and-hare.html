@@ -7,7 +7,7 @@
   </head>
 <body>
 
-  <canvas width=500 height=320></canvas>
+  <canvas width=200 height=320></canvas>
 
   FPS: <span id="fps"></span>. Move with arrow keys.
   
@@ -24,8 +24,8 @@
       var player
       var blocks
       var fps
-      var width = 700
-      var height = 700
+      var width = 50
+      var height = 50
       var tile_map
       var viewport
 
@@ -39,6 +39,14 @@
             blocks.push( new jaws.Sprite({image: "images/grass.png", x: i*32, y: i2*32}) )
           }
         }
+
+        // road
+        for(var i = width / 2 - 2; i < width / 2 + 2; i++) {
+          for(var i2 = 0; i2 < height; i2++) {
+            blocks.push( new jaws.Sprite({image: "images/road.png", x: i*32, y: i2*32}) )
+          }
+        }
+
         
         //blocks.push( new Sprite({image: "grass.png", x: 0, y: 0}) )
         viewport = new jaws.Viewport({max_x: width*32, max_y: height*32})
@@ -50,14 +58,14 @@
         // Later on we can look them up really fast (see player.move)
         tile_map.push(blocks)
 
-        player = new jaws.Sprite({x:10, y:10, scale: 2, anchor: "center"})
+        player = new jaws.Sprite({x:width*32/2, y:height*32 - 200, scale: 1, anchor: "center"})
         
-        var anim = new jaws.Animation({sprite_sheet: "images/droid_11x15.png", frame_size: [11,15], frame_duration: 100})
-        player.anim_default = anim.slice(0,5)
-        player.anim_up = anim.slice(6,8)
-        player.anim_down = anim.slice(8,10)
-        player.anim_left = anim.slice(10,12)
-        player.anim_right = anim.slice(12,14)
+        var anim = new jaws.Animation({sprite_sheet: "images/tortoise_32x32.png", frame_size: [23,32], frame_duration: 1000})
+        player.anim_default = anim.slice(0,1)
+        player.anim_up = anim.slice(0,1)
+        player.anim_down = anim.slice(0,1)
+        player.anim_left = anim.slice(0,1)
+        player.anim_right = anim.slice(0,1)
 
         player.setImage( player.anim_default.next() )
         jaws.preventDefaultKeys(["up", "down", "left", "right", "space"])
@@ -97,7 +105,8 @@
     
     jaws.onload = function() {
       jaws.unpack()
-      jaws.assets.add(["images/droid_11x15.png","images/grass.png"])
+      jaws.assets.add(["images/tortoise_32x32.png","images/grass.png",
+                       "images/road.png"])
       jaws.start(Example)  // Our convenience function jaws.start() will load assets, call setup and loop update/draw in 60 FPS
     }
   </script>
