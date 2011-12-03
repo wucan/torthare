@@ -76,9 +76,12 @@
           this.move(x, y)
           objects.innerHTML = tile_map.atRect(player.rect()).length
           var collide = false
-          tile_map.atRect(player.rect()).forEach(function(obj) {
-            if (obj.options.kind && obj.options.kind == "grass")
+          tile_map.atRect(player.rect()).some(function(obj, i) {
+            if (obj.options.kind && obj.options.kind == "grass") {
               collide = true
+              return true
+            }
+            return false
           })
           if (collide)
             this.move(-x, -y)
