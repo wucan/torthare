@@ -41,18 +41,13 @@
 
         for(var i = 0; i < width; i++) {
           for(var i2 = 0; i2 < height; i2++) {
-            blocks.push( new jaws.Sprite({image: "images/grass.png", x: i*32, y: i2*32, kind: "grass"}) )
+            if ((i >= width / 2 - 2) && (i <= width / 2 + 2))
+              blocks.push( new jaws.Sprite({image: "images/road.png", x: i*32, y: i2*32, kind: "road"}) )
+            else
+              blocks.push( new jaws.Sprite({image: "images/grass.png", x: i*32, y: i2*32, kind: "grass"}) )
           }
         }
 
-        // road
-        for(var i = width / 2 - 2; i < width / 2 + 2; i++) {
-          for(var i2 = 0; i2 < height; i2++) {
-            blocks.push( new jaws.Sprite({image: "images/road.png", x: i*32, y: i2*32, kind: "road"}) )
-          }
-        }
-
-        
         //blocks.push( new Sprite({image: "grass.png", x: 0, y: 0}) )
         viewport = new jaws.Viewport({max_x: width*32, max_y: height*32})
 
@@ -79,9 +74,13 @@
         player._move = function(x, y) {
           this.move(x, y)
           objects.innerHTML = tile_map.atRect(player.rect()).length
-          if (tile_map.atRect(player.rect()).length < 4) {
+          var collide = false
+          tile_map.atRect(player.rect()).forEach(function(obj) {
+            if (obj.options.kind && obj.options.kind == "grass")
+              collide = true
+          })
+          if (collide)
             this.move(-x, -y)
-          }
         }
       }
 
