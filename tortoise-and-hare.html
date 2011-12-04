@@ -7,6 +7,11 @@
   </head>
 <body>
 
+  <audio id="background">
+    <source src="audios/background.ogg" type="audio/ogg" />
+    <source src="audios/background.mps" type="audio/mps" />
+  </audio>
+
   <canvas width=200 height=320></canvas>
 
   FPS: <span id="fps"></span>. Move with arrow keys.
@@ -32,6 +37,7 @@
       var height = 50
       var tile_map
       var viewport
+      var background_audio
 
       /* Called once when a game state is activated. Use it for one-time setup code. */
       this.setup = function() {
@@ -96,6 +102,16 @@
         hare.anim_left = anim.slice(0,1)
         hare.anim_right = anim.slice(0,1)
         hare.setImage( hare.anim_default.next() )
+
+        /* background audio */
+        background_audio = jaws.assets.get("audios/background.ogg")
+        if (!background_audio)
+          background_audio = document.getElementById("background")
+        if (background_audio) {
+          background_audio.volume = 0.3
+          background_audio.addEventListener('ended', function() { this.currentTime = 0 }, false)
+          background_audio.play()
+        }
       }
 
       /* update() will get called each game tick with your specified FPS. Put game logic here. */
