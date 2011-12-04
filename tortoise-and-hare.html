@@ -112,6 +112,17 @@
           background_audio.addEventListener('ended', function() { this.currentTime = 0 }, false)
           background_audio.play()
         }
+
+        window.onblur = pause
+        window.onfocus = unpause
+      }
+
+      function pause() {
+        background_audio && background_audio.pause()
+      }
+
+      function unpause() {
+        background_audio && background_audio.play()
       }
 
       /* update() will get called each game tick with your specified FPS. Put game logic here. */
